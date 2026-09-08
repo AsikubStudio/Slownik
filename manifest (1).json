@@ -1,0 +1,25 @@
+{
+  "name": "Quant słowniczek dla Asika",
+  "short_name": "Słowniczek",
+  "description": "Osobisty słowniczek terminologii programistycznej i finansowo-tradingowej.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFF2FF",
+  "theme_color": "#FFF2FF",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192%20(1).png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512%20(1).png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
