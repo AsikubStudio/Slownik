@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quant słowniczek dla Asika</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FFF2FF">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFF2FF;
+  --surface: #FFFFFF;
+  --ink: #2E1F2E;
+  --ink-soft: #6B4E6B;
+  --ink-mute: #B69AB6;
+  --rose: #C2477F;
+  --rose-soft: #F3DFF0;
+  --rose-deep: #9E2F66;
+  --leaf: #6F8C5C;
+  --border: #ECD9EC;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.mark {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(1.9rem, 5vw, 2.5rem);
+  margin: 0;
+  color: var(--ink);
+}
+
+.flower {
+  display: flex;
+  justify-content: center;
+  margin: 1.4rem 0 2rem;
+}
+
+.controls {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  padding: 1rem 0;
+  z-index: 5;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.tab {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.65rem 0.5rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab:hover { border-color: var(--rose); color: var(--ink); }
+
+.tab.active {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: #FFFFFF;
+}
+
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-wrap { position: relative; flex: 1; }
+
+#search {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  outline: none;
+}
+
+#search::placeholder { color: var(--ink-mute); }
+#search:focus { border-color: var(--rose); }
+
+.add-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--rose);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--rose-deep);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.add-btn:hover { background: var(--rose); color: #fff; }
+
+.add-panel {
+  margin-top: 0.8rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  display: none;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.add-panel.open { display: flex; }
+
+.add-panel label {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.add-panel input,
+.add-panel select,
+.add-panel textarea {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  outline: none;
+}
+.add-panel input:focus,
+.add-panel select:focus,
+.add-panel textarea:focus { border-color: var(--rose); }
+.add-panel textarea { resize: vertical; min-height: 60px; font-family: 'Inter', sans-serif; }
+
+.add-row { display: flex; gap: 0.6rem; }
+.add-row label { flex: 1; }
+
+.add-error {
+  font-size: 0.78rem;
+  color: var(--rose-deep);
+  display: none;
+}
+.add-error.show { display: block; }
+
+.add-actions { display: flex; gap: 0.6rem; align-items: center; }
+
+.add-submit {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--rose-deep);
+  color: #fff;
+  cursor: pointer;
+}
+.add-submit:hover { opacity: 0.9; }
+
+.add-cancel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: none;
+}
+.add-cancel.show { display: inline; }
+
+.letter {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--rose-deep);
+  margin: 2rem 0 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.letter:first-of-type { margin-top: 0; }
+
+.entry {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.entry-main { flex: 1; min-width: 0; }
+
+.entry-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.term {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.alias {
+  font-size: 0.82rem;
+  color: var(--leaf);
+}
+
+.def {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+
+.entry-actions {
+  display: flex;
+  gap: 0.3rem;
+  align-self: flex-start;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.icon-btn:hover { color: var(--rose-deep); background: var(--rose-soft); }
+.icon-btn.confirm { color: #fff; background: var(--rose-deep); }
+
+.empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--ink-mute);
+  font-size: 0.9rem;
+}
+
+.signature {
+  text-align: center;
+  margin-top: 2.5rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+  color: var(--rose-deep);
+  opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  .page { padding: 2rem 1.1rem 4rem; }
+  .search-row { flex-direction: column; }
+  .add-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>Quant słowniczek dla Asika</h1>
+  </header>
+  <div style="height: 1.6rem;"></div>
+
+  <div class="controls">
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-cat="prog" role="tab" aria-selected="true">Programowanie</button>
+      <button class="tab" data-cat="fin" role="tab" aria-selected="false">Finanse i trading</button>
+    </div>
+    <div class="search-row">
+      <div class="search-wrap">
+        <input type="search" id="search" placeholder="Szukaj hasła..." autocomplete="off">
+      </div>
+      <button class="add-btn" id="toggleAdd">+ Dodaj hasło</button>
+    </div>
+    <div class="add-panel" id="addPanel">
+      <div class="add-row">
+        <label>Hasło
+          <input type="text" id="newTerm" placeholder="np. Wolumen">
+        </label>
+        <label>Nazwa angielska (opcjonalnie)
+          <input type="text" id="newAlias" placeholder="np. volume">
+        </label>
+      </div>
+      <label>Kategoria
+        <select id="newCat">
+          <option value="prog">Programowanie</option>
+          <option value="fin">Finanse i trading</option>
+        </select>
+      </label>
+      <label>Definicja
+        <textarea id="newDef" placeholder="Krótkie wyjaśnienie hasła..."></textarea>
+      </label>
+      <span class="add-error" id="addError">Uzupełnij hasło i definicję.</span>
+      <div class="add-actions">
+        <button class="add-submit" id="submitAdd">Dodaj hasło</button>
+        <button class="add-cancel" id="cancelEdit">Anuluj edycję</button>
+      </div>
+    </div>
+  </div>
+
+  <main id="list"></main>
+
+  <div class="signature">𝐒𝐭✰𝐫𝐠𝐢𝐫𝐥</div>
+
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, onSnapshot
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBOOvTowyUrOw33Sx0xkcJUSV8NtUw8WRs",
+    authDomain: "slownik-3718c.firebaseapp.com",
+    projectId: "slownik-3718c",
+    storageBucket: "slownik-3718c.firebasestorage.app",
+    messagingSenderId: "384392828023",
+    appId: "1:384392828023:web:03f59db14ea3b18f662272"
+  };
+
+  try {
+    const app = initializeApp(firebaseConfig);
+    const fs = getFirestore(app);
+    const docRef = doc(fs, "dict", "data");
+    window.__firebaseSync = { docRef, getDoc, setDoc, onSnapshot };
+  } catch (e) {
+    window.__firebaseSync = null;
+  }
+</script>
+<script type="module">
+const BASE_DATA = {
+  prog: [
+    { term: "API", alias: "application programming interface", def: "Interfejs programistyczny pozwalający dwóm programom wymieniać dane, np. pobieranie cen akcji z zewnętrznego serwisu." },
+    { term: "Baza danych", alias: "database", def: "Zorganizowany sposób przechowywania dużych ilości danych, np. historycznych notowań spółek." },
+    { term: "Biblioteka", alias: "library", def: "Gotowy zestaw kodu, który można doinstalować i wykorzystać zamiast pisać wszystko od zera (np. pandas, numpy)." },
+    { term: "DataFrame", def: "Tabela danych z bibliotek takich jak pandas - wygodna forma pracy z danymi giełdowymi ułożonymi w wiersze i kolumny." },
+    { term: "Endpoint", def: "Konkretny adres w API, pod którym dostępne są określone dane, np. endpoint zwracający dzienne kursy akcji." },
+    { term: "Funkcja", alias: "function", def: "Nazwany fragment kodu wykonujący określone zadanie, który można wywołać wielokrotnie z różnymi danymi wejściowymi." },
+    { term: "Git", def: "System kontroli wersji zapisujący historię zmian w kodzie, ułatwiający pracę zespołową i cofanie błędów." },
+    { term: "Klasa", alias: "class", def: "Szablon opisujący, jak zbudować obiekt, np. klasa Ticker opisująca dane pojedynczej spółki." },
+    { term: "Lista", alias: "list", def: "Uporządkowany zbiór wartości, np. lista symboli giełdowych, które program ma pobrać." },
+    { term: "Obiekt", alias: "object", def: "Konkretny egzemplarz klasy, posiadający własne, niezależne dane." },
+    { term: "Pętla", alias: "loop", def: "Konstrukcja powtarzająca fragment kodu, dopóki spełniony jest warunek, np. przetwarzanie listy spółek jedna po drugiej." },
+    { term: "SQL", alias: "structured query language", def: "Język zapytań służący do odczytu i zapisu danych w bazie danych." },
+    { term: "Słownik", alias: "dictionary", def: "Struktura danych przechowująca wartości w parach klucz-wartość, np. AAPL: 189.34." },
+    { term: "Środowisko wirtualne", alias: "virtual environment", def: "Odizolowana przestrzeń projektu z własnym zestawem zainstalowanych bibliotek, niekolidująca z innymi projektami." },
+    { term: "Wyjątek", alias: "exception", def: "Sytuacja błędu w programie, którą można złapać i obsłużyć zamiast pozwolić programowi się zatrzymać." },
+    { term: "Zmienna", alias: "variable", def: "Miejsce w pamięci przechowujące wartość, którą program może odczytać lub zmienić w trakcie działania." },
+  ],
+  fin: [
+    { term: "Alpha", def: "Nadwyżkowy zysk strategii ponad to, co dałoby samo podążanie za rynkiem." },
+    { term: "Backtesting", def: "Testowanie strategii inwestycyjnej na danych historycznych, aby sprawdzić, jak radziłaby sobie w przeszłości." },
+    { term: "Benchmark", def: "Punkt odniesienia, np. indeks giełdowy, z którym porównuje się wyniki strategii." },
+    { term: "D/E ratio", alias: "debt to equity ratio", def: "Wskaźnik zadłużenia mierzący relację długu do kapitału własnego spółki - im wyższy, tym większa dźwignia finansowa." },
+    { term: "Dźwignia", alias: "leverage", def: "Mechanizm pozwalający kontrolować pozycję większą niż wynikałoby to z posiadanego kapitału - zwiększa zarówno zyski, jak i straty." },
+    { term: "EBITDA", alias: "earnings before interest, taxes, depreciation and amortization", def: "Zysk operacyjny powiększony o amortyzację - pokazuje zdolność firmy do generowania gotówki niezależnie od księgowości i finansowania." },
+    { term: "EPS", alias: "earnings per share", def: "Zysk netto spółki podzielony przez liczbę wyemitowanych akcji." },
+    { term: "EV", alias: "enterprise value", def: "Kapitalizacja rynkowa powiększona o dług netto - pokazuje całkowitą wartość firmy niezależnie od struktury finansowania." },
+    { term: "FCF", alias: "free cash flow", def: "Gotówka pozostająca firmie po pokryciu wydatków operacyjnych i inwestycyjnych, dostępna dla inwestorów." },
+    { term: "Kapitalizacja rynkowa", alias: "market cap", def: "Łączna wartość rynkowa wszystkich akcji spółki: cena akcji pomnożona przez liczbę akcji w obrocie." },
+    { term: "Krótka sprzedaż", alias: "short", def: "Zakład na spadek ceny aktywa, realizowany poprzez sprzedaż pożyczonego instrumentu." },
+    { term: "Obsunięcie kapitału", alias: "drawdown", def: "Spadek wartości portfela od jego szczytu do najniższego punktu przed kolejnym odbiciem." },
+    { term: "OHLCV", alias: "open, high, low, close, volume", def: "Skrót od open, high, low, close, volume - pięć podstawowych wartości opisujących notowanie w danym okresie." },
+    { term: "P/B ratio", alias: "price to book ratio", def: "Stosunek ceny akcji do wartości księgowej przypadającej na akcję." },
+    { term: "P/E ratio", alias: "price to earnings ratio", def: "Stosunek ceny akcji do zysku na akcję - pokazuje, ile inwestorzy płacą za każdą złotówkę zysku spółki." },
+    { term: "Płynność", alias: "liquidity", def: "Łatwość kupna lub sprzedaży aktywa bez istotnego wpływu na jego cenę." },
+    { term: "Portfel", alias: "portfolio", def: "Zestaw wszystkich aktywów posiadanych przez inwestora." },
+    { term: "Poślizg cenowy", alias: "slippage", def: "Różnica między oczekiwaną a faktyczną ceną, po jakiej wykonało się zlecenie." },
+    { term: "Pozycja długa", alias: "long", def: "Zakład na wzrost ceny aktywa - zysk rośnie, gdy cena idzie w górę." },
+    { term: "Pozycja krótka", alias: "short", def: "Zakład na spadek ceny aktywa - zysk rośnie, gdy cena spada. Zajmowana zwykle poprzez krótką sprzedaż pożyczonego instrumentu." },
+    { term: "ROE", alias: "return on equity", def: "Stosunek zysku netto do kapitału własnego - pokazuje efektywność wykorzystania kapitału akcjonariuszy." },
+    { term: "Spread", def: "Różnica między najlepszą ceną kupna (bid) a najlepszą ceną sprzedaży (ask)." },
+    { term: "Stop-loss", def: "Automatyczne zlecenie zamykające pozycję po spadku ceny do ustalonego poziomu, ograniczające stratę." },
+    { term: "Stopa dywidendy", alias: "dividend yield", def: "Roczna dywidenda na akcję podzielona przez cenę akcji, wyrażona w procentach." },
+    { term: "Take-profit", def: "Automatyczne zlecenie zamykające pozycję po osiągnięciu założonego poziomu zysku." },
+    { term: "Ticker", def: "Skrócony symbol identyfikujący spółkę na giełdzie, np. AAPL dla Apple." },
+    { term: "Wskaźnik Sharpe'a", def: "Miara zysku strategii w stosunku do podjętego ryzyka - wyższa wartość oznacza lepszy stosunek zysku do zmienności." },
+    { term: "Zlecenie rynkowe", alias: "market order", def: "Zlecenie kupna lub sprzedaży realizowane natychmiast po aktualnej cenie rynkowej." },
+    { term: "Zlecenie z limitem", alias: "limit order", def: "Zlecenie realizowane tylko po określonej cenie lub lepszej - nie wykona się po gorszej." },
+    { term: "Zmienność", alias: "volatility", def: "Miara tego, jak mocno cena danego aktywa waha się w czasie." },
+  ]
+};
+
+function uid() {
+  return 'id-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+function seedData() {
+  return {
+    prog: BASE_DATA.prog.map(e => ({ ...e, id: uid() })),
+    fin: BASE_DATA.fin.map(e => ({ ...e, id: uid() })),
+  };
+}
+
+function saveData(d) {
+  try { localStorage.setItem('slowniczek-data-v3', JSON.stringify(d)); } catch (e) {}
+}
+
+function persist() {
+  saveData(data);
+  if (fsDocRef) {
+    fsSetDoc(fsDocRef, data).catch(() => {});
+  }
+}
+
+function mergeMissingBaseTerms(existing) {
+  let changed = false;
+  for (const cat of ['prog', 'fin']) {
+    const have = new Set(existing[cat].map(e => e.term.toLowerCase()));
+    BASE_DATA[cat].forEach(baseEntry => {
+      if (!have.has(baseEntry.term.toLowerCase())) {
+        existing[cat].push({ ...baseEntry, id: uid() });
+        changed = true;
+      }
+    });
+  }
+  return changed;
+}
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem('slowniczek-data-v3');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (mergeMissingBaseTerms(parsed)) saveData(parsed);
+      return parsed;
+    }
+  } catch (e) {}
+  const fresh = seedData();
+  saveData(fresh);
+  return fresh;
+}
+
+let data = loadData();
+let fsDocRef = null;
+
+function mergeStores(local, remote) {
+  const merged = { prog: [], fin: [] };
+  for (const cat of ['prog', 'fin']) {
+    const byId = new Map();
+    (remote[cat] || []).forEach(e => byId.set(e.id, e));
+    (local[cat] || []).forEach(e => { if (!byId.has(e.id)) byId.set(e.id, e); });
+    merged[cat] = Array.from(byId.values());
+  }
+  return merged;
+}
+
+async function initSync() {
+  if (!window.__firebaseSync) return;
+  const { docRef, getDoc, setDoc, onSnapshot } = window.__firebaseSync;
+  fsDocRef = docRef;
+  window.fsSetDoc = setDoc;
+
+  try {
+    const snap = await getDoc(fsDocRef);
+    if (snap.exists()) {
+      data = mergeStores(data, snap.data());
+    }
+    saveData(data);
+    await setDoc(fsDocRef, data);
+    render();
+
+    onSnapshot(fsDocRef, (s) => {
+      if (!s.exists()) return;
+      const remote = s.data();
+      if (JSON.stringify(remote) !== JSON.stringify(data)) {
+        data = remote;
+        saveData(data);
+        render();
+      }
+    }, () => {});
+  } catch (e) {
+    fsDocRef = null;
+  }
+}
+
+function fsSetDoc(ref, d) {
+  if (window.fsSetDoc) return window.fsSetDoc(ref, d);
+  return Promise.resolve();
+}
+
+let activeCat = 'prog';
+let query = '';
+let editingId = null;
+
+function normalize(str) {
+  return str.toLowerCase()
+    .replace(/ą/g,'a').replace(/ć/g,'c').replace(/ę/g,'e').replace(/ł/g,'l')
+    .replace(/ń/g,'n').replace(/ó/g,'o').replace(/ś/g,'s').replace(/ź/g,'z').replace(/ż/g,'z');
+}
+
+const ICON_EDIT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+const ICON_DELETE = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>';
+const ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+
+function render() {
+  const list = document.getElementById('list');
+  const items = data[activeCat]
+    .filter(e => normalize(e.term).includes(normalize(query)) || normalize(e.def).includes(normalize(query)))
+    .slice()
+    .sort((a, b) => a.term.localeCompare(b.term, 'pl'));
+
+  if (items.length === 0) {
+    list.innerHTML = '<div class="empty">Brak haseł pasujących do wyszukiwania.</div>';
+    return;
+  }
+
+  let html = '';
+  let lastLetter = '';
+  items.forEach(entry => {
+    const letter = entry.term[0].toUpperCase();
+    if (letter !== lastLetter) {
+      html += `<div class="letter">${letter}</div>`;
+      lastLetter = letter;
+    }
+    const aliasHtml = entry.alias ? `<span class="alias">(${entry.alias})</span>` : '';
+    html += `
+      <div class="entry">
+        <div class="entry-main">
+          <div class="entry-head">
+            <span class="term">${entry.term}</span>
+            ${aliasHtml}
+          </div>
+          <p class="def">${entry.def}</p>
+        </div>
+        <div class="entry-actions">
+          <button class="icon-btn edit-btn" data-id="${entry.id}" title="Edytuj hasło" aria-label="Edytuj hasło">${ICON_EDIT}</button>
+          <button class="icon-btn delete-btn" data-id="${entry.id}" title="Usuń hasło" aria-label="Usuń hasło">${ICON_DELETE}</button>
+        </div>
+      </div>`;
+  });
+  list.innerHTML = html;
+  bindLetterEgg();
+
+  list.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => startEdit(btn.dataset.id));
+  });
+
+  list.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('confirm')) {
+        deleteEntry(btn.dataset.id);
+      } else {
+        btn.classList.add('confirm');
+        btn.innerHTML = ICON_CHECK;
+        btn.title = 'Kliknij ponownie, aby potwierdzić';
+        setTimeout(() => {
+          if (btn.isConnected) {
+            btn.classList.remove('confirm');
+            btn.innerHTML = ICON_DELETE;
+            btn.title = 'Usuń hasło';
+          }
+        }, 2500);
+      }
+    });
+  });
+}
+
+function bindLetterEgg() {
+  document.querySelectorAll('.letter').forEach(el => {
+    if (el.textContent.trim() === 'A' && !el.dataset.eggBound) {
+      el.dataset.eggBound = '1';
+      el.addEventListener('click', () => {
+        if (el.dataset.busy) return;
+        el.dataset.busy = '1';
+        el.textContent = 'Stopy';
+        setTimeout(() => {
+          el.textContent = 'A';
+          delete el.dataset.busy;
+        }, 3000);
+      });
+    }
+  });
+}
+
+function deleteEntry(id) {
+  data[activeCat] = data[activeCat].filter(e => e.id !== id);
+  persist();
+  if (editingId === id) exitEdit();
+  render();
+}
+
+function startEdit(id) {
+  const entry = data[activeCat].find(e => e.id === id);
+  if (!entry) return;
+  editingId = id;
+  document.getElementById('newTerm').value = entry.term;
+  document.getElementById('newAlias').value = entry.alias || '';
+  document.getElementById('newCat').value = activeCat;
+  document.getElementById('newDef').value = entry.def;
+  document.getElementById('addError').classList.remove('show');
+  document.getElementById('submitAdd').textContent = 'Zapisz zmiany';
+  document.getElementById('cancelEdit').classList.add('show');
+  document.getElementById('addPanel').classList.add('open');
+  document.getElementById('newTerm').focus();
+}
+
+function exitEdit() {
+  editingId = null;
+  document.getElementById('newTerm').value = '';
+  document.getElementById('newAlias').value = '';
+  document.getElementById('newDef').value = '';
+  document.getElementById('addError').classList.remove('show');
+  document.getElementById('submitAdd').textContent = 'Dodaj hasło';
+  document.getElementById('cancelEdit').classList.remove('show');
+  document.getElementById('addPanel').classList.remove('open');
+}
+
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    activeCat = btn.dataset.cat;
+    document.getElementById('newCat').value = activeCat;
+    try { localStorage.setItem('slowniczek-cat', activeCat); } catch (e) {}
+    if (editingId) exitEdit();
+    render();
+  });
+});
+
+document.getElementById('search').addEventListener('input', (e) => {
+  query = e.target.value;
+  render();
+});
+
+const toggleAdd = document.getElementById('toggleAdd');
+const addPanel = document.getElementById('addPanel');
+toggleAdd.addEventListener('click', () => {
+  if (editingId) { exitEdit(); return; }
+  addPanel.classList.toggle('open');
+});
+
+document.getElementById('cancelEdit').addEventListener('click', exitEdit);
+
+document.getElementById('submitAdd').addEventListener('click', () => {
+  const term = document.getElementById('newTerm').value.trim();
+  const alias = document.getElementById('newAlias').value.trim();
+  const cat = document.getElementById('newCat').value;
+  const def = document.getElementById('newDef').value.trim();
+  const errorEl = document.getElementById('addError');
+
+  if (!term || !def) {
+    errorEl.classList.add('show');
+    return;
+  }
+  errorEl.classList.remove('show');
+
+  if (editingId) {
+    for (const c of ['prog', 'fin']) {
+      data[c] = data[c].filter(e => e.id !== editingId);
+    }
+    const editedEntry = { id: editingId, term, def };
+    if (alias) editedEntry.alias = alias;
+    data[cat].push(editedEntry);
+  } else {
+    const newEntry = { id: uid(), term, def };
+    if (alias) newEntry.alias = alias;
+    data[cat].push(newEntry);
+  }
+  persist();
+
+  exitEdit();
+
+  if (cat !== activeCat) {
+    document.querySelectorAll('.tab').forEach(b => {
+      const isActive = b.dataset.cat === cat;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', String(isActive));
+    });
+    activeCat = cat;
+  }
+  render();
+});
+
+try {
+  const saved = localStorage.getItem('slowniczek-cat');
+  if (saved && data[saved]) {
+    activeCat = saved;
+    document.querySelectorAll('.tab').forEach(b => {
+      const isActive = b.dataset.cat === saved;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', String(isActive));
+    });
+    document.getElementById('newCat').value = saved;
+  }
+} catch (e) {}
+
+render();
+initSync();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
