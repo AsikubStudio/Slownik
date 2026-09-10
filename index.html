@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quant słowniczek dla Asika</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FFF2FF">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFF2FF;
+  --surface: #FFFFFF;
+  --ink: #2E1F2E;
+  --ink-soft: #6B4E6B;
+  --ink-mute: #B69AB6;
+  --rose: #C2477F;
+  --rose-soft: #F3DFF0;
+  --rose-deep: #9E2F66;
+  --leaf: #6F8C5C;
+  --border: #ECD9EC;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.mark {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: clamp(1.9rem, 5vw, 2.5rem);
+  margin: 0;
+  color: var(--ink);
+}
+
+.flower {
+  display: flex;
+  justify-content: center;
+  margin: 1.4rem 0 2rem;
+}
+
+.controls {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  padding: 1rem 0;
+  z-index: 5;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.8rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.tab {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.65rem 0.5rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab:hover { border-color: var(--rose); color: var(--ink); }
+
+.tab-count {
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.tab.active {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: #FFFFFF;
+}
+
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.search-wrap { position: relative; flex: 1; }
+
+#search {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.7rem 2.3rem 0.7rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  outline: none;
+}
+
+#search::placeholder { color: var(--ink-mute); }
+#search:focus { border-color: var(--rose); }
+
+.history-toggle {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 6px;
+  display: flex;
+}
+.history-toggle:hover { color: var(--rose-deep); background: var(--rose-soft); }
+
+.history-dropdown {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 10;
+  display: none;
+  overflow: hidden;
+}
+.history-dropdown.open { display: block; }
+
+.history-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.9rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  border: none;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+.history-item:last-of-type { border-bottom: none; }
+.history-item:hover { background: var(--rose-soft); }
+
+.history-empty {
+  padding: 0.7rem 0.9rem;
+  font-size: 0.82rem;
+  color: var(--ink-mute);
+}
+
+.history-clear {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--rose-deep);
+  background: var(--rose-soft);
+  border: none;
+  cursor: pointer;
+}
+.history-clear:hover { background: var(--rose); color: #fff; }
+
+.add-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--rose);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--rose-deep);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.add-btn:hover { background: var(--rose); color: #fff; }
+
+.add-panel {
+  margin-top: 0.8rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  display: none;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.add-panel.open { display: flex; }
+
+.add-panel label {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.add-panel input,
+.add-panel select,
+.add-panel textarea {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  outline: none;
+}
+.add-panel input:focus,
+.add-panel select:focus,
+.add-panel textarea:focus { border-color: var(--rose); }
+.add-panel textarea { resize: vertical; min-height: 60px; font-family: 'Inter', sans-serif; }
+
+.add-row { display: flex; gap: 0.6rem; }
+.add-row label { flex: 1; }
+
+.add-error {
+  font-size: 0.78rem;
+  color: var(--rose-deep);
+  display: none;
+}
+.add-error.show { display: block; }
+
+.add-actions { display: flex; gap: 0.6rem; align-items: center; }
+
+.add-submit {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--rose-deep);
+  color: #fff;
+  cursor: pointer;
+}
+.add-submit:hover { opacity: 0.9; }
+
+.add-cancel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: none;
+}
+.add-cancel.show { display: inline; }
+
+.letter {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--rose-deep);
+  margin: 2rem 0 0.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.letter:first-of-type { margin-top: 0; }
+
+.entry {
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.entry.starred {
+  border-left: 3px solid var(--rose-deep);
+  padding-left: 0.6rem;
+  margin-left: -0.9rem;
+}
+
+.tag {
+  font-size: 0.7rem;
+  color: var(--ink-mute);
+  font-style: italic;
+}
+
+.level-stars {
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  color: #C9A227;
+  cursor: help;
+}
+
+.entry-main { flex: 1; min-width: 0; }
+
+.entry-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.term {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.alias {
+  font-size: 0.82rem;
+  color: var(--leaf);
+}
+
+.def {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+
+.entry-actions {
+  display: flex;
+  gap: 0.3rem;
+  align-self: flex-start;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.icon-btn:hover { color: var(--rose-deep); background: var(--rose-soft); }
+.icon-btn.confirm { color: #fff; background: var(--rose-deep); }
+
+.empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--ink-mute);
+  font-size: 0.9rem;
+}
+
+.wod-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0.4rem 0 0.1rem;
+}
+
+.wod-btn {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  padding: 0.45rem 1.2rem;
+  border: 1px solid var(--rose);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--rose-deep);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.wod-btn:hover { background: var(--rose); color: #fff; }
+
+.sort-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+  font-size: 0.82rem;
+}
+
+.sort-label { color: var(--ink-mute); margin-right: 0.2rem; }
+
+.sort-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.sort-btn:hover { border-color: var(--rose); color: var(--ink); }
+.sort-btn.active {
+  background: var(--rose-soft);
+  border-color: var(--rose);
+  color: var(--rose-deep);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 50;
+}
+.modal-overlay.open { display: flex; }
+
+.modal-card {
+  position: relative;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 2rem 1.6rem 1.6rem;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  border: none;
+  background: none;
+  color: var(--ink-mute);
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 6px;
+}
+.modal-close:hover { color: var(--rose-deep); background: var(--rose-soft); }
+
+.modal-tag {
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  margin-bottom: 0.5rem;
+}
+
+.modal-term {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+
+.modal-alias {
+  font-size: 0.9rem;
+  color: var(--leaf);
+  margin-bottom: 0.8rem;
+}
+
+.modal-def {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+#explainView, #explainEditForm { display: none; }
+#explainView.show, #explainEditForm.show { display: block; }
+
+#explainInput {
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+}
+#explainInput:focus { border-color: var(--rose); }
+
+.signature {
+  text-align: center;
+  margin-top: 2.5rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
+  color: var(--rose-deep);
+  opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  .page { padding: 2rem 1.1rem 4rem; }
+  .search-row { flex-direction: column; }
+  .add-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>Quant słowniczek dla Asika</h1>
+  </header>
+
+  <div class="wod-wrap">
+    <button class="wod-btn" id="wordOfDayBtn">Losowe hasło</button>
+  </div>
+
+  <div class="controls">
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-cat="prog" role="tab" aria-selected="true">Programowanie <span class="tab-count" id="countProg"></span></button>
+      <button class="tab" data-cat="fin" role="tab" aria-selected="false">Finanse i trading <span class="tab-count" id="countFin"></span></button>
+    </div>
+    <div class="sort-row">
+      <span class="sort-label">Sortuj:</span>
+      <button class="sort-btn active" data-sort="alpha">A-Z</button>
+      <button class="sort-btn" data-sort="starred">★ Najpierw</button>
+      <button class="sort-btn" id="levelSortBtn" data-sort="level-desc" data-dir="desc" title="Kliknij ponownie, żeby odwrócić kierunek">Poziom ↓</button>
+    </div>
+    <div class="search-row">
+      <div class="search-wrap">
+        <input type="search" id="search" placeholder="Szukaj hasła..." autocomplete="off">
+        <button class="history-toggle" id="historyToggle" title="Ostatnio wyszukiwane" aria-label="Ostatnio wyszukiwane">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="history-dropdown" id="historyDropdown"></div>
+      </div>
+      <button class="add-btn" id="toggleAdd">+ Dodaj hasło</button>
+    </div>
+    <div class="add-panel" id="addPanel">
+      <div class="add-row">
+        <label>Hasło
+          <input type="text" id="newTerm" placeholder="np. Wolumen">
+        </label>
+        <label>Nazwa angielska (opcjonalnie)
+          <input type="text" id="newAlias" placeholder="np. volume">
+        </label>
+      </div>
+      <label>Kategoria
+        <select id="newCat">
+          <option value="prog">Programowanie</option>
+          <option value="fin">Finanse i trading</option>
+        </select>
+      </label>
+      <label>Poziom powszechności
+        <select id="newLevel">
+          <option value="1">★☆☆☆☆ - zaawansowane, rzadkie</option>
+          <option value="2">★★☆☆☆</option>
+          <option value="3" selected>★★★☆☆</option>
+          <option value="4">★★★★☆</option>
+          <option value="5">★★★★★ - podstawowe, częste</option>
+        </select>
+      </label>
+      <label>Definicja
+        <textarea id="newDef" placeholder="Krótkie wyjaśnienie hasła..."></textarea>
+      </label>
+      <span class="add-error" id="addError">Uzupełnij hasło i definicję.</span>
+      <div class="add-actions">
+        <button class="add-submit" id="submitAdd">Dodaj hasło</button>
+        <button class="add-cancel" id="cancelEdit">Anuluj edycję</button>
+      </div>
+    </div>
+  </div>
+
+  <main id="list"></main>
+
+  <div class="signature">°❀⋆.ೃ࿔*:･°❀⋆.ೃ࿔*࿔ೃ.⋆❀°･:࿔ೃ.⋆❀°</div>
+
+</div>
+
+<div class="modal-overlay" id="wodOverlay">
+  <div class="modal-card">
+    <button class="modal-close" id="wodClose" aria-label="Zamknij">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-tag" id="wodCat"></div>
+    <div class="modal-term" id="wodTerm"></div>
+    <div class="modal-alias" id="wodAlias"></div>
+    <p class="modal-def" id="wodDef"></p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="explainOverlay">
+  <div class="modal-card">
+    <button class="modal-close" id="explainClose" aria-label="Zamknij">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+    </button>
+    <div class="modal-tag">Po chłopsku</div>
+    <div class="modal-term" id="explainTerm"></div>
+
+    <div id="explainView">
+      <p class="modal-def" id="explainText"></p>
+      <button class="history-clear" id="explainEditBtn" style="margin-top:1rem;">Edytuj wyjaśnienie</button>
+    </div>
+
+    <div id="explainEditForm">
+      <textarea id="explainInput" placeholder="Napisz proste wyjaśnienie własnymi słowami, jakbyś tłumaczył znajomemu..."></textarea>
+      <button class="add-submit" id="explainSaveBtn" style="margin-top:0.7rem;">Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, onSnapshot
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBOOvTowyUrOw33Sx0xkcJUSV8NtUw8WRs",
+    authDomain: "slownik-3718c.firebaseapp.com",
+    projectId: "slownik-3718c",
+    storageBucket: "slownik-3718c.firebasestorage.app",
+    messagingSenderId: "384392828023",
+    appId: "1:384392828023:web:03f59db14ea3b18f662272"
+  };
+
+  try {
+    const app = initializeApp(firebaseConfig);
+    const fs = getFirestore(app);
+    const docRef = doc(fs, "dict", "data");
+    window.__firebaseSync = { docRef, getDoc, setDoc, onSnapshot };
+  } catch (e) {
+    window.__firebaseSync = null;
+  }
+</script>
+<script type="module">
+const BASE_DATA = {
+  prog: [
+    { term: "API", alias: "application programming interface", def: "Interfejs programistyczny pozwalający dwóm programom wymieniać dane, np. pobieranie cen akcji z zewnętrznego serwisu.", simple: "To jak kelner w restauracji: mówisz czego chcesz, a on przynosi to z kuchni innego programu - nie musisz wiedzieć, jak tam gotują.", level: 4 },
+    { term: "Baza danych", alias: "database", def: "Zorganizowany sposób przechowywania dużych ilości danych, np. historycznych notowań spółek.", simple: "Wielki, uporządkowany magazyn, gdzie program chowa i wyciąga dane, zamiast trzymać wszystko w pamięci na krótko.", level: 4 },
+    { term: "Biblioteka", alias: "library", def: "Gotowy zestaw kodu, który można doinstalować i wykorzystać zamiast pisać wszystko od zera (np. pandas, numpy).", simple: "Cudzy, gotowy kawałek kodu, który dokładasz do swojego programu, żeby nie pisać tego samego od nowa.", level: 5 },
+    { term: "DataFrame", def: "Tabela danych z bibliotek takich jak pandas - wygodna forma pracy z danymi giełdowymi ułożonymi w wiersze i kolumny.", simple: "Tabelka jak w Excelu, tylko że żyje w kodzie - wiersze, kolumny, można to filtrować i liczyć.", level: 3 },
+    { term: "Endpoint", def: "Konkretny adres w API, pod którym dostępne są określone dane, np. endpoint zwracający dzienne kursy akcji.", simple: "Konkretny 'przystanek' w internecie, pod który program dzwoni, żeby dostać konkretne dane.", level: 3 },
+    { term: "Funkcja", alias: "function", def: "Nazwany fragment kodu wykonujący określone zadanie, który można wywołać wielokrotnie z różnymi danymi wejściowymi.", simple: "Mała maszynka w kodzie: wrzucasz coś na wejściu, ona to przerabia i oddaje wynik.", level: 5 },
+    { term: "Git", def: "System kontroli wersji zapisujący historię zmian w kodzie, ułatwiający pracę zespołową i cofanie błędów.", simple: "Coś jak historia edycji w Wordzie, tylko dla całego projektu kodu - można cofnąć każdą zmianę.", level: 4 },
+    { term: "Klasa", alias: "class", def: "Szablon opisujący, jak zbudować obiekt, np. klasa Ticker opisująca dane pojedynczej spółki.", simple: "Przepis czy szablon na coś - np. przepis na 'spółkę giełdową', z którego potem robisz konkretne spółki.", level: 4 },
+    { term: "Lista", alias: "list", def: "Uporządkowany zbiór wartości, np. lista symboli giełdowych, które program ma pobrać.", simple: "Zwykła lista zakupów, tylko w kodzie - kolejność ma znaczenie, można dodawać i usuwać.", level: 5 },
+    { term: "Obiekt", alias: "object", def: "Konkretny egzemplarz klasy, posiadający własne, niezależne dane.", simple: "Konkretna rzecz zrobiona z przepisu (klasy) - jak upieczony placek z przepisu na placek.", level: 4 },
+    { term: "Pętla", alias: "loop", def: "Konstrukcja powtarzająca fragment kodu, dopóki spełniony jest warunek, np. przetwarzanie listy spółek jedna po drugiej.", simple: "Każesz komputerowi robić to samo wiele razy, zamiast pisać to samo w kółko ręcznie.", level: 5 },
+    { term: "SQL", alias: "structured query language", def: "Język zapytań służący do odczytu i zapisu danych w bazie danych.", simple: "Język, którym pytasz bazę danych: 'daj mi wszystkie spółki z zyskiem powyżej X'.", level: 3 },
+    { term: "Słownik", alias: "dictionary", def: "Struktura danych przechowująca wartości w parach klucz-wartość, np. AAPL: 189.34.", simple: "Szufladki podpisane etykietką - szukasz po nazwie (kluczu), nie po numerze.", level: 5 },
+    { term: "Środowisko wirtualne", alias: "virtual environment", def: "Odizolowana przestrzeń projektu z własnym zestawem zainstalowanych bibliotek, niekolidująca z innymi projektami.", simple: "Osobna, czysta 'piaskownica' na komputerze dla jednego projektu, żeby biblioteki się nie pogryzły między projektami.", level: 3 },
+    { term: "Wyjątek", alias: "exception", def: "Sytuacja błędu w programie, którą można złapać i obsłużyć zamiast pozwolić programowi się zatrzymać.", simple: "Program mówi 'coś poszło nie tak' zamiast się wywalić bez słowa - i można to obsłużyć.", level: 3 },
+    { term: "Zmienna", alias: "variable", def: "Miejsce w pamięci przechowujące wartość, którą program może odczytać lub zmienić w trakcie działania.", simple: "Pudełko z etykietką, w którym trzymasz jakąś wartość, żeby użyć jej później.", level: 5 },
+    { term: "JSON", def: "Lekki format zapisu danych w postaci tekstu, powszechnie używany do wymiany informacji między programami i API.", simple: "Sposób zapisania danych jako czytelny tekst z nawiasami klamrowymi - jak ustrukturyzowana notatka, którą łatwo odczyta i program, i człowiek.", level: 4 },
+    { term: "Dziedziczenie", alias: "inheritance", def: "Mechanizm, w którym jedna klasa przejmuje strukturę innej klasy i może (lub musi) ją uzupełnić własną logiką.", simple: "Syn dziedziczy po ojcu firmę i jej zasady, ale sam decyduje, jak dokładnie prowadzić poszczególne interesy.", level: 3 },
+    { term: "Klasa abstrakcyjna", alias: "interfejs, kontrakt", def: "Klasa, której nie da się użyć samodzielnie - działa jak umowa: każda klasa dziedzicząca po niej musi zaimplementować określone metody, inaczej program zgłosi błąd.", simple: "Umowa o pracę opisująca obowiązki na stanowisku, ale nie mówiąca, jak dokładnie je wykonywać - to już zależy od konkretnego pracownika.", level: 2 },
+    { term: "self", def: "Słowo używane wewnątrz klasy oznaczające 'ten konkretny obiekt, na którym właśnie pracujemy' - dzięki niemu metoda wie, czyje dane ma zmieniać.", simple: "'Ja' w zdaniu wypowiadanym przez konkretną osobę - ta sama instrukcja, ale zawsze dotyczy tego, kto ją aktualnie wykonuje.", level: 4 },
+    { term: "Moduł", def: "Pojedynczy plik z kodem Pythona, który można zaimportować do innego pliku.", simple: "Jeden rozdział w książce.", level: 4 },
+    { term: "Pakiet", alias: "package", def: "Folder grupujący moduły, rozpoznawany przez Pythona jako coś, z czego można importować.", simple: "Cała książka złożona z rozdziałów, oprawiona w jedną okładkę.", level: 4 },
+    { term: "Plik konfiguracyjny", alias: "YAML", def: "Plik tekstowy przechowujący ustawienia albo dane wejściowe (np. listę tickerów) osobno od kodu.", simple: "Kartka z listą zakupów leżąca osobno od przepisu - zmieniasz listę, nie ruszając przepisu.", level: 3 },
+    { term: "Indeks", alias: "DataFrame index", def: "Etykieta przypisana do każdego wiersza w tabeli danych (np. numer albo data) - domyślnie nie liczy się jako zwykła kolumna, dopóki świadomie jej nie 'wyciągniemy'.", simple: "Numer domu na kopercie, a nie treść listu - trzeba go świadomie przepisać do środka, jeśli ma się liczyć jako zwykła informacja.", level: 2 },
+    { term: "Filtrowanie warunkiem logicznym", def: "Wybieranie z tabeli tylko wierszy spełniających jeden lub więcej warunków naraz.", simple: "Jak filtr w Excelu albo w sklepie internetowym - zaznaczasz kilka kryteriów i widzisz tylko pasujące produkty.", level: 3 },
+    { term: "SQLite", def: "Lekka baza danych, której cały silnik mieści się w jednym pliku, bez potrzeby uruchamiania osobnego serwera.", simple: "Szafka z segregatorami zamiast wynajmowania całego archiwum z portierem.", level: 2 },
+    { term: "Połączenie", alias: "connection (baza danych)", def: "Otwarty kanał komunikacji między programem a bazą danych, przez który można wysyłać polecenia.", simple: "Otwarcie drzwi do archiwum - samo otwarcie drzwi jeszcze niczego nie szuka, ale bez niego nie wejdziesz do środka.", level: 2 },
+    { term: "Kursor", alias: "cursor (baza danych)", def: "Narzędzie, którym faktycznie wykonuje się polecenia (zapytania) na już otwartym połączeniu z bazą danych.", simple: "Osoba, która po otwarciu drzwi do archiwum faktycznie chodzi między regałami i szuka albo odkłada dokumenty.", level: 2 },
+    { term: "Tabela", alias: "table", def: "Struktura w bazie danych złożona z kolumn (typów danych) i wierszy (rekordów).", simple: "To samo co arkusz w Excelu, tylko żyjące wewnątrz bazy danych, a nie w pliku.", level: 3 },
+    { term: "Klucz główny", alias: "primary key", def: "Kolumna (albo zestaw kolumn), której wartość musi być unikalna dla każdego wiersza w tabeli.", simple: "Numer PESEL tabeli - nie może się powtórzyć u dwóch różnych 'osób' (wierszy).", level: 2 },
+    { term: "Upsert", def: "Operacja 'wstaw albo nadpisz' - jeśli wiersz o danym kluczu już istnieje, zostaje zaktualizowany zamiast zduplikowany.", simple: "Aktualizujesz wpis w kartotece zamiast zakładać drugą, identyczną teczkę dla tej samej osoby.", level: 1 },
+    { term: "Zapytanie parametryzowane", def: "Sposób przekazywania wartości do zapytania SQL osobno od samej treści zapytania, dla bezpieczeństwa i poprawności.", simple: "Wypełniasz gotowy formularz w puste pola, zamiast dopisywać własny tekst prosto do umowy - mniejsze ryzyko, że coś się 'przekręci'.", level: 1 },
+    { term: "Repozytorium", alias: "repository", def: "Folder projektu śledzony przez Git, z pełną historią wszystkich zmian.", simple: "Segregator z każdą wersją dokumentu, jaka kiedykolwiek powstała, nie tylko ostatnią.", level: 4 },
+    { term: "Commit", def: "Zapisany punkt kontrolny zmian w kodzie, z opisem, co się zmieniło.", simple: "Zdjęcie stanu dokumentu w danym momencie, podpisane datą i notatką.", level: 4 },
+    { term: "Branch", alias: "gałąź", def: "Odizolowana kopia robocza kodu, na której można pracować bez wpływu na główną wersję (main).", simple: "Kopia roboczego dokumentu, na której bazgrolisz i poprawiasz, zanim ktokolwiek zobaczy to w 'czystopisie'.", level: 3 },
+    { term: "Merge conflict", alias: "konflikt scalania", def: "Sytuacja, gdy ten sam fragment pliku został zmieniony w dwóch miejscach jednocześnie i Git nie potrafi sam zdecydować, którą wersję zostawić.", simple: "Dwie osoby poprawiły to samo zdanie w dokumencie na różne sposoby - ktoś musi ręcznie zdecydować, która wersja zostaje.", level: 2 },
+    { term: "Pull Request", def: "Prośba o scalenie zmian z gałęzi z powrotem do głównej wersji (main), widoczna i przeglądalna przed połączeniem.", simple: "Pokazujesz komuś swój brudnopis do akceptacji, zanim wejdzie do oficjalnej wersji dokumentu.", level: 2 },
+    { term: "Klucz API", alias: "API key", def: "Unikalny identyfikator przypisany użytkownikowi, wymagany przez niektóre API do rozpoznania, kto wysyła zapytanie.", simple: "API to okienko podawcze w urzędzie, a klucz API to Twój numerek uprawniający do obsługi.", level: 3 },
+    { term: "Regex", alias: "wyrażenie regularne", def: "Wzorzec opisujący, jak ma wyglądać fragment tekstu, używany do wyszukiwania i dopasowywania danych, np. wyłapania samych liczb z tekstu.", simple: "Specjalny 'szablon szukania' w tekście - mówisz komputerowi 'znajdź coś, co wygląda jak numer telefonu' i on to znajduje.", level: 2 },
+    { term: "Harmonogram zadań", alias: "cron", def: "Mechanizm uruchamiający kod automatycznie o ustalonych porach, np. codziennie po zamknięciu giełdy.", simple: "Budzik dla programu - sam się uruchamia o wybranej godzinie, bez Twojego udziału.", level: 2 },
+    { term: "Logowanie zdarzeń", alias: "logging", def: "Zapisywanie informacji o tym, co program robił krok po kroku, przydatne do wykrywania błędów w kodzie działającym bez nadzoru.", simple: "Dziennik pokładowy programu - zapisuje co się działo, żebyś mógł sprawdzić, co poszło nie tak, gdy Cię przy tym nie było.", level: 2 },
+    { term: "Cache", def: "Tymczasowe przechowywanie wyniku obliczeń lub pobranych danych, żeby nie liczyć albo nie pobierać tego samego po raz drugi.", simple: "Ściągawka - raz coś sprawdzisz i zapiszesz wynik, żeby za drugim razem nie szukać od nowa.", level: 2 },
+    { term: "WebSocket", def: "Stałe, dwukierunkowe połączenie z serwerem, przez które dane (np. notowania) spływają na bieżąco, bez konieczności odpytywania w kółko.", simple: "Zamiast co chwilę pytać 'coś się zmieniło?', otwierasz jedną 'linię telefoniczną', a serwer sam mówi, gdy coś się zmieni.", level: 2 },
+  ],
+  fin: [
+    { term: "Alpha", def: "Nadwyżkowy zysk strategii ponad to, co dałoby samo podążanie za rynkiem.", simple: "Ile lepiej (albo gorzej) wypadła Twoja strategia niż zwykłe 'kupić i trzymać cały rynek'.", level: 2 },
+    { term: "Backtesting", def: "Testowanie strategii inwestycyjnej na danych historycznych, aby sprawdzić, jak radziłaby sobie w przeszłości.", simple: "Sprawdzanie 'a co by było, gdybym tak inwestował 5 lat temu' na starych danych, zanim zaryzykujesz prawdziwe pieniądze.", level: 4 },
+    { term: "Benchmark", def: "Punkt odniesienia, np. indeks giełdowy, z którym porównuje się wyniki strategii.", simple: "Punkt odniesienia do porównań - np. 'czy pobiłem WIG20, czy tylko się obijałem'.", level: 3 },
+    { term: "D/E ratio", alias: "debt to equity ratio", def: "Wskaźnik zadłużenia mierzący relację długu do kapitału własnego spółki - im wyższy, tym większa dźwignia finansowa.", simple: "Ile firma ma długu w porównaniu do własnych pieniędzy - im więcej, tym bardziej 'na kredyt' działa.", level: 2 },
+    { term: "Dźwignia", alias: "leverage", def: "Mechanizm pozwalający kontrolować pozycję większą niż wynikałoby to z posiadanego kapitału - zwiększa zarówno zyski, jak i straty.", simple: "Grasz cudzymi pieniędzmi, żeby postawić więcej niż masz - zyski i straty rosną mocniej.", level: 3 },
+    { term: "EBITDA", alias: "earnings before interest, taxes, depreciation and amortization", def: "Zysk operacyjny powiększony o amortyzację - pokazuje zdolność firmy do generowania gotówki niezależnie od księgowości i finansowania.", simple: "Ile firma realnie zarabia na działalności, zanim odejmiemy podatki, odsetki i 'papierowe' koszty jak amortyzacja.", level: 2 },
+    { term: "EPS", alias: "earnings per share", def: "Zysk netto spółki podzielony przez liczbę wyemitowanych akcji.", simple: "Ile zysku firmy wypada na jedną akcję - jakby podzielić tort na wszystkich akcjonariuszy.", level: 3 },
+    { term: "EV", alias: "enterprise value", def: "Kapitalizacja rynkowa powiększona o dług netto - pokazuje całkowitą wartość firmy niezależnie od struktury finansowania.", simple: "Ile realnie kosztowałoby kupienie całej firmy razem z jej długami.", level: 2 },
+    { term: "FCF", alias: "free cash flow", def: "Gotówka pozostająca firmie po pokryciu wydatków operacyjnych i inwestycyjnych, dostępna dla inwestorów.", simple: "Gotówka, która firmie realnie zostaje w kieszeni po opłaceniu rachunków i inwestycji.", level: 2 },
+    { term: "Kapitalizacja rynkowa", alias: "market cap", def: "Łączna wartość rynkowa wszystkich akcji spółki: cena akcji pomnożona przez liczbę akcji w obrocie.", simple: "Ile warta jest cała spółka na giełdzie, gdybyś chciał wykupić wszystkie akcje po aktualnej cenie.", level: 4 },
+    { term: "Krótka sprzedaż", alias: "short", def: "Zakład na spadek ceny aktywa, realizowany poprzez sprzedaż pożyczonego instrumentu.", simple: "Pożyczasz akcje, sprzedajesz od razu, licząc że cena spadnie i odkupisz taniej - zarabiasz na spadku.", level: 3 },
+    { term: "Obsunięcie kapitału", alias: "drawdown, max drawdown", def: "Spadek wartości portfela od ostatniego szczytu do kolejnego dołka. Największy taki spadek w całej historii nazywa się Max Drawdown i pokazuje, ile najwięcej można było stracić, kupując na szczycie i trzymając pozycję - to kluczowa miara ryzyka strategii.", simple: "Poziom wody w zbiorniku, który czasem opada od ostatniego najwyższego punktu. Max Drawdown to najgorszy taki spadek w historii - odpowiedź na pytanie 'ile maksymalnie mogłem stracić'.", level: 3 },
+    { term: "OHLCV", alias: "open, high, low, close, volume", def: "Skrót od open, high, low, close, volume - pięć podstawowych wartości opisujących notowanie w danym okresie.", simple: "Pięć liczb opisujących jeden dzień notowań: gdzie się zaczęło, gdzie skończyło, jak wysoko i nisko było, i ile się tego handlowało.", level: 4 },
+    { term: "P/B ratio", alias: "price to book ratio", def: "Stosunek ceny akcji do wartości księgowej przypadającej na akcję.", simple: "Porównanie ceny akcji do tego, ile firma 'jest warta na papierze' według księgowości.", level: 2 },
+    { term: "P/E ratio", alias: "price to earnings ratio", def: "Stosunek ceny akcji do zysku na akcję - pokazuje, ile inwestorzy płacą za każdą złotówkę zysku spółki.", simple: "Ile lat musiałaby firma zarabiać obecny zysk, żeby 'spłacić' cenę, którą za nią płacisz.", level: 3 },
+    { term: "Płynność", alias: "liquidity", def: "Łatwość kupna lub sprzedaży aktywa bez istotnego wpływu na jego cenę.", simple: "Jak łatwo coś sprzedać albo kupić bez psucia ceny - mieszkanie sprzedasz trudniej niż akcje Apple.", level: 3 },
+    { term: "Portfel", alias: "portfolio", def: "Zestaw wszystkich aktywów posiadanych przez inwestora.", simple: "Wszystko, co masz zainwestowane, razem wzięte - jeden worek ze wszystkimi Twoimi inwestycjami.", level: 5 },
+    { term: "Poślizg cenowy", alias: "slippage", def: "Różnica między oczekiwaną a faktyczną ceną, po jakiej wykonało się zlecenie.", simple: "Zapłaciłeś inną cenę niż widziałeś na ekranie, bo zanim zlecenie się wykonało, cena zdążyła drgnąć.", level: 2 },
+    { term: "Pozycja długa", alias: "long", def: "Zakład na wzrost ceny aktywa - zysk rośnie, gdy cena idzie w górę.", simple: "Zwykłe 'kupuję i czekam, aż podrożeje'.", level: 4 },
+    { term: "Pozycja krótka", alias: "short", def: "Zakład na spadek ceny aktywa - zysk rośnie, gdy cena spada. Zajmowana zwykle poprzez krótką sprzedaż pożyczonego instrumentu.", simple: "Odwrotność zwykłego inwestowania - zarabiasz, gdy cena spada, a tracisz, gdy rośnie.", level: 3 },
+    { term: "ROE", alias: "return on equity", def: "Stosunek zysku netto do kapitału własnego - pokazuje efektywność wykorzystania kapitału akcjonariuszy.", simple: "Jak dobrze firma pomnaża pieniądze, które włożyli w nią właściciele i akcjonariusze.", level: 2 },
+    { term: "Spread", def: "Różnica między najlepszą ceną kupna (bid) a najlepszą ceną sprzedaży (ask).", simple: "Różnica między 'za ile kupię' a 'za ile sprzedam' w danym momencie - im mniejsza, tym taniej handlujesz.", level: 3 },
+    { term: "Stop-loss", def: "Automatyczne zlecenie zamykające pozycję po spadku ceny do ustalonego poziomu, ograniczające stratę.", simple: "Automatyczne 'wyjdź z tego, zanim strata urośnie za bardzo', ustawione z góry.", level: 4 },
+    { term: "Stopa dywidendy", alias: "dividend yield", def: "Roczna dywidenda na akcję podzielona przez cenę akcji, wyrażona w procentach.", simple: "Ile procent ceny akcji dostajesz co roku w gotówce, jakby to była 'lokata' od spółki.", level: 3 },
+    { term: "Take-profit", def: "Automatyczne zlecenie zamykające pozycję po osiągnięciu założonego poziomu zysku.", simple: "Automatyczne 'sprzedaj, gdy osiągnę tyle zysku, ile chciałem'.", level: 4 },
+    { term: "Ticker", def: "Skrócony symbol identyfikujący spółkę na giełdzie, np. AAPL dla Apple.", simple: "Skrót-ksywka spółki na giełdzie, np. Apple to po prostu AAPL.", level: 5 },
+    { term: "Wskaźnik Sharpe'a", def: "Zwrot strategii skorygowany o zmienność: średni zwrot podzielony przez odchylenie standardowe zwrotów (dla danych dziennych zwykle mnożony dodatkowo przez pierwiastek z 252, liczby dni sesyjnych w roku).", simple: "Nie liczy się tylko 'ile zarobiłem', tylko 'ile zarobiłem w stosunku do tego, jak bardzo mną rzucało po drodze' - spokojna jazda z tym samym zyskiem daje wyższy wynik.", level: 2 },
+    { term: "Zlecenie rynkowe", alias: "market order", def: "Zlecenie kupna lub sprzedaży realizowane natychmiast po aktualnej cenie rynkowej.", simple: "'Kup albo sprzedaj już, po jakiejkolwiek cenie jest teraz' - szybko, ale bez gwarancji ceny.", level: 4 },
+    { term: "Zlecenie z limitem", alias: "limit order", def: "Zlecenie realizowane tylko po określonej cenie lub lepszej - nie wykona się po gorszej.", simple: "'Kup albo sprzedaj, ale tylko po mojej cenie albo lepszej' - wolniej, ale kontrolujesz cenę.", level: 4 },
+    { term: "Zmienność", alias: "volatility", def: "Miara tego, jak mocno cena danego aktywa waha się w czasie.", simple: "Jak bardzo cena skacze w górę i w dół - spokojna spółka kontra szalona kryptowaluta.", level: 4 },
+    { term: "Świeca", alias: "candlestick", def: "Sposób rysowania notowania na wykresie jako jednego słupka pokazującego cenę otwarcia, zamknięcia oraz najwyższą i najniższą cenę w danym okresie.", simple: "Jeden 'słupek' na wykresie mówiący, co się działo z ceną w danym czasie - czy rosła, czy spadała, i jak bardzo się wahała.", level: 4 },
+    { term: "Średnia krocząca", alias: "moving average, SMA, EMA", def: "Średnia z ceny zamknięcia z ostatnich N dni, liczona na nowo każdego kolejnego dnia - wygładza wykres i pomaga dostrzec trend zamiast codziennego szumu.", simple: "Zamiast reagować na to, jak cena skacze codziennie, wygładzamy ją - jak ocena nastroju z całego tygodnia zamiast jednego złego dnia.", level: 4 },
+    { term: "RSI", alias: "relative strength index", def: "Wskaźnik techniczny (0-100) pokazujący, czy dany walor był ostatnio mocno wykupiony czy wyprzedany.", simple: "Miernik 'czy ostatnio kupowano to za bardzo agresywnie, czy sprzedawano w panice' - pomaga wyczuć, czy ruch ceny się przegrzał.", level: 3 },
+    { term: "Wstęga Bollingera", alias: "Bollinger Bands", def: "Pasmo wokół średniej ceny, którego szerokość rośnie i maleje wraz ze zmiennością - cena blisko brzegów wstęgi sugeruje odchylenie od normy.", simple: "Gumowa 'obwódka' wokół ceny, która się rozciąga, gdy jest nerwowo na rynku, a kurczy, gdy jest spokojnie.", level: 2 },
+    { term: "Wsparcie i opór", alias: "support / resistance", def: "Poziomy cenowe, przy których cena historycznie zatrzymywała się lub odbijała, traktowane jako potencjalne bariery.", simple: "Niewidzialna 'podłoga' (wsparcie) i 'sufit' (opór) na wykresie - cena często się od nich odbija, zanim je przebije.", level: 3 },
+    { term: "Księga zleceń", alias: "order book", def: "Lista wszystkich aktualnych ofert kupna i sprzedaży danego waloru na giełdzie, uporządkowana według ceny.", simple: "Tablica ogłoszeń giełdy - widać na niej, kto za ile chce kupić, a kto za ile chce sprzedać, w danej chwili.", level: 2 },
+    { term: "Wielkość pozycji", alias: "position sizing", def: "Decyzja, jaką część kapitału przeznaczyć na pojedynczą transakcję, kluczowa dla zarządzania ryzykiem.", simple: "Ile realnie stawiasz na jeden zakład - nawet dobra strategia zawiedzie, jeśli za każdym razem stawiasz zbyt dużo.", level: 2 },
+    { term: "Value at Risk", alias: "VaR", def: "Miara szacująca maksymalną możliwą stratę portfela w określonym horyzoncie czasu, z zadanym poziomem prawdopodobieństwa.", simple: "Szacunek 'ile najwięcej mogę stracić w normalnych warunkach', np. 'z 95% pewnością nie stracę więcej niż X w ciągu dnia'.", level: 1 },
+    { term: "Przeuczenie", alias: "overfitting", def: "Sytuacja, w której strategia świetnie radzi sobie na danych historycznych, bo 'nauczyła się' ich przypadkowego szumu, ale zawodzi na nowych danych.", simple: "Strategia 'wykuła na pamięć' stare dane zamiast zrozumieć ogólny wzorzec - na nowych danych się gubi.", level: 2 },
+    { term: "Walk-forward testing", def: "Metoda testowania strategii, w której dane dzieli się na kolejne, przesuwające się okresy trenowania i sprawdzania, dając bardziej wiarygodny obraz niż zwykły backtest.", simple: "Bardziej uczciwy sposób testowania strategii - sprawdzasz ją na kawałkach danych po kolei, tak jak faktycznie płynąłby czas, zamiast na wszystkim naraz.", level: 1 },
+    { term: "Paper trading", def: "Testowanie strategii inwestycyjnej na żywym rynku, ale za pomocą wirtualnych, nie prawdziwych pieniędzy.", simple: "Trening na sucho - grasz jakby na giełdzie, ale bez ryzykowania prawdziwej gotówki.", level: 3 },
+    { term: "Korelacja", def: "Miara tego, w jakim stopniu dwa aktywa poruszają się razem - dodatnia oznacza ruch w tym samym kierunku, ujemna w przeciwnym.", simple: "Czy dwie rzeczy 'tańczą razem' - gdy jedna rośnie, druga też rośnie (albo odwrotnie, gdy są przeciwstawne).", level: 3 },
+    { term: "Dywersyfikacja", def: "Rozłożenie kapitału na wiele różnych, najlepiej niepowiązanych ze sobą aktywów, żeby ograniczyć ryzyko pojedynczej inwestycji.", simple: "Nie wkładaj wszystkich jajek do jednego koszyka - jak jedna inwestycja padnie, reszta portfela wciąż stoi.", level: 4 },
+    { term: "Strategia przecięcia średnich", alias: "MA crossover", def: "Strategia oparta na dwóch średnich kroczących - krótkiej (np. 10-dniowej) i długiej (np. 30-dniowej). Gdy krótka przecina długą od dołu, to sygnał kupna ('złoty krzyż'); gdy przecina od góry, to sygnał sprzedaży ('krzyż śmierci').", simple: "Liczysz dwie wygładzone linie ceny - krótką i długą. Gdy szybsza wyprzedza wolniejszą, to znak 'wchodź w rynek'; gdy spada pod nią, to znak 'wychodź'.", level: 2 },
+    { term: "Stopa zwrotu", alias: "return", def: "Procentowa zmiana wartości inwestycji między dwoma momentami, liczona jako (wartość dziś / wartość wczoraj) minus 1.", simple: "O ile procent urosła albo zmalała Twoja skarbonka od wczoraj.", level: 4 },
+    { term: "Look-ahead bias", def: "Błąd w backteście polegający na przypadkowym wykorzystaniu informacji, która w rzeczywistości nie byłaby jeszcze dostępna w danym momencie (np. użycie jutrzejszej ceny do dzisiejszej decyzji) - daje nierealistycznie dobre wyniki.", simple: "Ściąganie z przyszłości podczas testowania strategii - np. licząc średnią kroczącą tylko z przeszłych dni, nigdy nie 'podglądając' jutra, bo inaczej wyniki testu są kłamstwem.", level: 2 },
+    { term: "Dane dzienne", def: "Dane rynkowe zapisane z częstotliwością jeden wiersz na dzień.", simple: "Jedno zdjęcie sytuacji na koniec dnia, zamiast całego filmu z tego, co działo się w międzyczasie.", level: 4 },
+    { term: "Dane intraday", alias: "wewnątrzdniowe", def: "Dane rynkowe zapisane z częstotliwością wyższą niż raz dziennie (np. co minutę czy godzinę), zwykle z krótszą dostępną historią w darmowych źródłach.", simple: "Nagranie wideo zamiast jednego zdjęcia dziennie - więcej szczegółów, ale znacznie więcej danych i trudniej dostępne za darmo.", level: 3 },
+    { term: "Strefa czasowa w danych giełdowych", def: "Znaczniki czasu w danych giełdowych zawierają przesunięcie względem UTC odpowiadające danej giełdzie (np. -05:00 dla Nowego Jorku).", simple: "Dane przychodzą z 'metką' mówiącą, w jakiej strefie czasowej powstały - dla danych dziennych tę metkę po prostu się odcina.", level: 2 },
+    { term: "Limit zapytań", alias: "rate limit", def: "Maksymalna liczba zapytań do danego API w określonym czasie.", simple: "Ile razy dziennie możesz zapukać do tego samego okienka, zanim Cię odeślą na jutro.", level: 3 },
+  ]
+};
+
+function uid() {
+  return 'id-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+function seedData() {
+  return {
+    prog: BASE_DATA.prog.map(e => ({ ...e, id: uid() })),
+    fin: BASE_DATA.fin.map(e => ({ ...e, id: uid() })),
+  };
+}
+
+function saveData(d) {
+  try { localStorage.setItem('slowniczek-data-v3', JSON.stringify(d)); } catch (e) {}
+}
+
+function persist() {
+  saveData(data);
+  if (fsDocRef && fsSetDoc) {
+    fsSetDoc(fsDocRef, data).catch(() => {});
+  }
+}
+
+function mergeMissingBaseTerms(existing) {
+  let changed = false;
+  for (const cat of ['prog', 'fin']) {
+    const have = new Set(existing[cat].map(e => e.term.toLowerCase()));
+    BASE_DATA[cat].forEach(baseEntry => {
+      if (!have.has(baseEntry.term.toLowerCase())) {
+        existing[cat].push({ ...baseEntry, id: uid() });
+        changed = true;
+      }
+    });
+  }
+  return changed;
+}
+
+function dedupeStore(store) {
+  const result = { prog: [], fin: [] };
+  let changed = false;
+  for (const cat of ['prog', 'fin']) {
+    const seen = new Map();
+    (store[cat] || []).forEach(e => {
+      const key = e.term.trim().toLowerCase();
+      if (!seen.has(key)) {
+        seen.set(key, e);
+      } else {
+        changed = true;
+        if (e.starred && !seen.get(key).starred) seen.set(key, e);
+      }
+    });
+    result[cat] = Array.from(seen.values());
+  }
+  return { store: result, changed };
+}
+
+function backfillSimple(existing) {
+  let changed = false;
+  for (const cat of ['prog', 'fin']) {
+    existing[cat].forEach(entry => {
+      if (!entry.simple) {
+        const baseMatch = BASE_DATA[cat].find(b => b.term.toLowerCase() === entry.term.toLowerCase());
+        if (baseMatch && baseMatch.simple) {
+          entry.simple = baseMatch.simple;
+          changed = true;
+        }
+      }
+    });
+  }
+  return changed;
+}
+
+function backfillLevel(existing) {
+  let changed = false;
+  for (const cat of ['prog', 'fin']) {
+    existing[cat].forEach(entry => {
+      if (!entry.level) {
+        const baseMatch = BASE_DATA[cat].find(b => b.term.toLowerCase() === entry.term.toLowerCase());
+        if (baseMatch && baseMatch.level) {
+          entry.level = baseMatch.level;
+          changed = true;
+        }
+      }
+    });
+  }
+  return changed;
+}
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem('slowniczek-data-v3');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const mergedNew = mergeMissingBaseTerms(parsed);
+      const { store, changed } = dedupeStore(parsed);
+      const backfilled = backfillSimple(store);
+      const backfilledLvl = backfillLevel(store);
+      if (mergedNew || changed || backfilled || backfilledLvl) saveData(store);
+      return store;
+    }
+  } catch (e) {}
+  const fresh = seedData();
+  saveData(fresh);
+  return fresh;
+}
+
+let data = loadData();
+let fsDocRef = null;
+let fsSetDoc = null;
+
+function mergeStores(local, remote) {
+  const merged = { prog: [], fin: [] };
+  for (const cat of ['prog', 'fin']) {
+    const byTerm = new Map();
+    (remote[cat] || []).forEach(e => byTerm.set(e.term.trim().toLowerCase(), e));
+    (local[cat] || []).forEach(e => {
+      const key = e.term.trim().toLowerCase();
+      if (!byTerm.has(key)) byTerm.set(key, e);
+    });
+    merged[cat] = Array.from(byTerm.values());
+  }
+  return merged;
+}
+
+async function initFirebaseSync() {
+  if (!window.__firebaseSync) return;
+  const { docRef, getDoc, setDoc, onSnapshot } = window.__firebaseSync;
+  fsDocRef = docRef;
+  fsSetDoc = setDoc;
+
+  try {
+    const snap = await getDoc(fsDocRef);
+    if (snap.exists()) {
+      const { store } = dedupeStore(snap.data());
+      data = mergeStores(data, store);
+      const cleaned = dedupeStore(data);
+      data = cleaned.store;
+      backfillSimple(data);
+      backfillLevel(data);
+    }
+    saveData(data);
+    await setDoc(fsDocRef, data);
+    render();
+
+    onSnapshot(fsDocRef, (s) => {
+      if (!s.exists()) return;
+      const { store: remote } = dedupeStore(s.data());
+      if (JSON.stringify(remote) !== JSON.stringify(data)) {
+        data = remote;
+        saveData(data);
+        render();
+      }
+    }, () => {});
+  } catch (e) {
+    fsDocRef = null;
+    fsSetDoc = null;
+  }
+}
+
+let activeCat = 'prog';
+let query = '';
+let editingId = null;
+let sortMode = 'alpha';
+
+function normalize(str) {
+  return str.toLowerCase()
+    .replace(/ą/g,'a').replace(/ć/g,'c').replace(/ę/g,'e').replace(/ł/g,'l')
+    .replace(/ń/g,'n').replace(/ó/g,'o').replace(/ś/g,'s').replace(/ź/g,'z').replace(/ż/g,'z');
+}
+
+const ICON_EDIT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+const ICON_DELETE = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>';
+const ICON_CHECK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+const ICON_STAR = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+const ICON_STAR_FILLED = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+const ICON_EXPLAIN = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 2-2.4 3.2"/><path d="M12 17h.01"/></svg>';
+
+const CAT_LABEL = { prog: 'prog.', fin: 'fin.' };
+
+function findEntry(id) {
+  for (const c of ['prog', 'fin']) {
+    const entry = data[c].find(e => e.id === id);
+    if (entry) return { entry, cat: c };
+  }
+  return null;
+}
+
+function levelStars(n) {
+  const lvl = Math.max(1, Math.min(5, n || 3));
+  return '★'.repeat(lvl) + '☆'.repeat(5 - lvl);
+}
+
+function entryHtml(entry, searching) {
+  const aliasHtml = entry.alias ? `<span class="alias">(${entry.alias})</span>` : '';
+  const catTagHtml = searching ? `<span class="tag">${CAT_LABEL[entry._cat]}</span>` : '';
+  const levelHtml = entry.level
+    ? `<span class="level-stars" title="Poziom ${entry.level}/5 - więcej gwiazdek = bardziej podstawowe i częściej spotykane, mniej = bardziej zaawansowane/rzadsze">${levelStars(entry.level)}</span>`
+    : '';
+  const starIcon = entry.starred ? ICON_STAR_FILLED : ICON_STAR;
+  return `
+      <div class="entry ${entry.starred ? 'starred' : ''}">
+        <div class="entry-main">
+          <div class="entry-head">
+            <span class="term">${entry.term}</span>
+            ${aliasHtml}
+            ${catTagHtml}
+            ${levelHtml}
+          </div>
+          <p class="def">${entry.def}</p>
+        </div>
+        <div class="entry-actions">
+          <button class="icon-btn explain-btn" data-id="${entry.id}" title="${entry.simple ? 'Zobacz wyjaśnienie po chłopsku' : 'Dodaj wyjaśnienie po chłopsku'}" aria-label="Wytłumacz prościej">${ICON_EXPLAIN}</button>
+          <button class="icon-btn star-btn ${entry.starred ? 'confirm' : ''}" data-id="${entry.id}" title="Oznacz jako ważne" aria-label="Oznacz jako ważne">${starIcon}</button>
+          <button class="icon-btn edit-btn" data-id="${entry.id}" title="Edytuj hasło" aria-label="Edytuj hasło">${ICON_EDIT}</button>
+          <button class="icon-btn delete-btn" data-id="${entry.id}" title="Usuń hasło" aria-label="Usuń hasło">${ICON_DELETE}</button>
+        </div>
+      </div>`;
+}
+
+function letteredHtml(items, searching) {
+  let html = '';
+  let lastLetter = '';
+  items.forEach(entry => {
+    const letter = entry.term[0].toUpperCase();
+    if (letter !== lastLetter) {
+      html += `<div class="letter">${letter}</div>`;
+      lastLetter = letter;
+    }
+    html += entryHtml(entry, searching);
+  });
+  return html;
+}
+
+function updateTabCounts() {
+  const cp = document.getElementById('countProg');
+  const cf = document.getElementById('countFin');
+  if (cp) cp.textContent = `(${data.prog.length})`;
+  if (cf) cf.textContent = `(${data.fin.length})`;
+}
+
+function render() {
+  updateTabCounts();
+  const list = document.getElementById('list');
+  const q = query.trim();
+  const searching = q.length > 0;
+
+  let items;
+  if (searching) {
+    items = [
+      ...data.prog.map(e => ({ ...e, _cat: 'prog' })),
+      ...data.fin.map(e => ({ ...e, _cat: 'fin' })),
+    ].filter(e => normalize(e.term).includes(normalize(q)) || normalize(e.def).includes(normalize(q)));
+  } else {
+    items = data[activeCat].slice();
+  }
+  items.sort((a, b) => a.term.localeCompare(b.term, 'pl'));
+
+  if (items.length === 0) {
+    list.innerHTML = '<div class="empty">Brak haseł pasujących do wyszukiwania.</div>';
+    return;
+  }
+
+  let html = '';
+  if (sortMode === 'starred') {
+    const starredItems = items.filter(e => e.starred);
+    const restItems = items.filter(e => !e.starred);
+    if (starredItems.length > 0) {
+      html += `<div class="letter">★ Ulubione</div>`;
+      starredItems.forEach(entry => { html += entryHtml(entry, searching); });
+    }
+    html += letteredHtml(restItems, searching);
+  } else if (sortMode === 'level-desc' || sortMode === 'level-asc') {
+    const dir = sortMode === 'level-desc' ? -1 : 1;
+    const sorted = items.slice().sort((a, b) => {
+      const diff = ((a.level || 3) - (b.level || 3)) * dir;
+      if (diff !== 0) return diff;
+      return a.term.localeCompare(b.term, 'pl');
+    });
+    let lastLevel = null;
+    sorted.forEach(entry => {
+      const lvl = entry.level || 3;
+      if (lvl !== lastLevel) {
+        html += `<div class="letter">${levelStars(lvl)} <span style="font-size:0.7rem; opacity:0.7;">(${lvl}/5)</span></div>`;
+        lastLevel = lvl;
+      }
+      html += entryHtml(entry, searching);
+    });
+  } else {
+    html = letteredHtml(items, searching);
+  }
+  list.innerHTML = html;
+  bindLetterEgg();
+
+  list.querySelectorAll('.explain-btn').forEach(btn => {
+    btn.addEventListener('click', () => explainSimple(btn.dataset.id));
+  });
+
+  list.querySelectorAll('.star-btn').forEach(btn => {
+    btn.addEventListener('click', () => toggleStar(btn.dataset.id));
+  });
+
+  list.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => startEdit(btn.dataset.id));
+  });
+
+  list.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('confirm')) {
+        deleteEntry(btn.dataset.id);
+      } else {
+        btn.classList.add('confirm');
+        btn.innerHTML = ICON_CHECK;
+        btn.title = 'Kliknij ponownie, aby potwierdzić';
+        setTimeout(() => {
+          if (btn.isConnected) {
+            btn.classList.remove('confirm');
+            btn.innerHTML = ICON_DELETE;
+            btn.title = 'Usuń hasło';
+          }
+        }, 2500);
+      }
+    });
+  });
+}
+
+function bindLetterEgg() {
+  document.querySelectorAll('.letter').forEach(el => {
+    if (el.textContent.trim() === 'A' && !el.dataset.eggBound) {
+      el.dataset.eggBound = '1';
+      el.addEventListener('click', () => {
+        if (el.dataset.busy) return;
+        el.dataset.busy = '1';
+        el.textContent = 'Stopy';
+        setTimeout(() => {
+          el.textContent = 'A';
+          delete el.dataset.busy;
+        }, 3000);
+      });
+    }
+  });
+}
+
+function toggleStar(id) {
+  const found = findEntry(id);
+  if (!found) return;
+  found.entry.starred = !found.entry.starred;
+  persist();
+  render();
+}
+
+function deleteEntry(id) {
+  for (const c of ['prog', 'fin']) {
+    data[c] = data[c].filter(e => e.id !== id);
+  }
+  persist();
+  if (editingId === id) exitEdit();
+  render();
+}
+
+function startEdit(id) {
+  const found = findEntry(id);
+  if (!found) return;
+  const { entry, cat } = found;
+  editingId = id;
+  document.getElementById('newTerm').value = entry.term;
+  document.getElementById('newAlias').value = entry.alias || '';
+  document.getElementById('newCat').value = cat;
+  document.getElementById('newLevel').value = String(entry.level || 3);
+  document.getElementById('newDef').value = entry.def;
+  document.getElementById('addError').classList.remove('show');
+  document.getElementById('submitAdd').textContent = 'Zapisz zmiany';
+  document.getElementById('cancelEdit').classList.add('show');
+  document.getElementById('addPanel').classList.add('open');
+  document.getElementById('newTerm').focus();
+}
+
+function exitEdit() {
+  editingId = null;
+  document.getElementById('newTerm').value = '';
+  document.getElementById('newAlias').value = '';
+  document.getElementById('newLevel').value = '3';
+  document.getElementById('newDef').value = '';
+  document.getElementById('addError').classList.remove('show');
+  document.getElementById('submitAdd').textContent = 'Dodaj hasło';
+  document.getElementById('cancelEdit').classList.remove('show');
+  document.getElementById('addPanel').classList.remove('open');
+}
+
+const levelSortBtn = document.getElementById('levelSortBtn');
+
+document.querySelectorAll('.sort-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn === levelSortBtn && btn.classList.contains('active')) {
+      const newDir = btn.dataset.dir === 'desc' ? 'asc' : 'desc';
+      btn.dataset.dir = newDir;
+      btn.dataset.sort = `level-${newDir}`;
+      btn.textContent = newDir === 'desc' ? 'Poziom ↓' : 'Poziom ↑';
+    }
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    sortMode = btn.dataset.sort;
+    render();
+  });
+});
+
+function getRandomWord() {
+  const all = [
+    ...data.prog.map(e => ({ ...e, _cat: 'prog' })),
+    ...data.fin.map(e => ({ ...e, _cat: 'fin' })),
+  ];
+  if (all.length === 0) return null;
+  return all[Math.floor(Math.random() * all.length)];
+}
+
+const wodOverlay = document.getElementById('wodOverlay');
+
+function openWordOfDay() {
+  const word = getRandomWord();
+  if (!word) return;
+  document.getElementById('wodCat').textContent = word._cat === 'prog' ? 'Programowanie' : 'Finanse i trading';
+  document.getElementById('wodTerm').textContent = word.term;
+  document.getElementById('wodAlias').textContent = word.alias ? `(${word.alias})` : '';
+  document.getElementById('wodDef').textContent = word.def;
+  wodOverlay.classList.add('open');
+}
+
+function closeWordOfDay() {
+  wodOverlay.classList.remove('open');
+}
+
+document.getElementById('wordOfDayBtn').addEventListener('click', openWordOfDay);
+document.getElementById('wodClose').addEventListener('click', closeWordOfDay);
+
+const explainOverlay = document.getElementById('explainOverlay');
+const explainTerm = document.getElementById('explainTerm');
+const explainText = document.getElementById('explainText');
+const explainView = document.getElementById('explainView');
+const explainEditForm = document.getElementById('explainEditForm');
+const explainInput = document.getElementById('explainInput');
+let currentExplainId = null;
+
+function showExplainView(text) {
+  explainText.textContent = text;
+  explainView.classList.add('show');
+  explainEditForm.classList.remove('show');
+}
+
+function showExplainEdit(prefill) {
+  explainInput.value = prefill || '';
+  explainEditForm.classList.add('show');
+  explainView.classList.remove('show');
+  explainInput.focus();
+}
+
+function explainSimple(id) {
+  const found = findEntry(id);
+  if (!found) return;
+  const { entry } = found;
+  currentExplainId = id;
+  explainTerm.textContent = entry.term;
+  explainOverlay.classList.add('open');
+
+  if (entry.simple) {
+    showExplainView(entry.simple);
+  } else {
+    showExplainEdit('');
+  }
+}
+
+document.getElementById('explainEditBtn').addEventListener('click', () => {
+  const found = findEntry(currentExplainId);
+  showExplainEdit(found ? found.entry.simple || '' : '');
+});
+
+document.getElementById('explainSaveBtn').addEventListener('click', () => {
+  const found = findEntry(currentExplainId);
+  if (!found) return;
+  const val = explainInput.value.trim();
+  if (val) {
+    found.entry.simple = val;
+  } else {
+    delete found.entry.simple;
+  }
+  persist();
+  render();
+  if (val) {
+    showExplainView(val);
+  } else {
+    explainOverlay.classList.remove('open');
+  }
+});
+
+document.getElementById('explainClose').addEventListener('click', () => {
+  explainOverlay.classList.remove('open');
+});
+explainOverlay.addEventListener('click', (e) => {
+  if (e.target === explainOverlay) explainOverlay.classList.remove('open');
+});
+wodOverlay.addEventListener('click', (e) => {
+  if (e.target === wodOverlay) closeWordOfDay();
+});
+
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+    activeCat = btn.dataset.cat;
+    document.getElementById('newCat').value = activeCat;
+    try { localStorage.setItem('slowniczek-cat', activeCat); } catch (e) {}
+    if (editingId) exitEdit();
+    render();
+  });
+});
+
+const searchInput = document.getElementById('search');
+const historyDropdown = document.getElementById('historyDropdown');
+const historyToggle = document.getElementById('historyToggle');
+
+function loadSearchHistory() {
+  try {
+    return JSON.parse(localStorage.getItem('slowniczek-search-history') || '[]');
+  } catch (e) { return []; }
+}
+
+function saveSearchHistory(list) {
+  try { localStorage.setItem('slowniczek-search-history', JSON.stringify(list)); } catch (e) {}
+}
+
+function addToSearchHistory(term) {
+  const trimmed = term.trim();
+  if (!trimmed) return;
+  let list = loadSearchHistory();
+  list = list.filter(t => t.toLowerCase() !== trimmed.toLowerCase());
+  list.unshift(trimmed);
+  if (list.length > 10) list = list.slice(0, 10);
+  saveSearchHistory(list);
+}
+
+function renderHistoryDropdown() {
+  const list = loadSearchHistory();
+  if (list.length === 0) {
+    historyDropdown.innerHTML = '<div class="history-empty">Brak ostatnich wyszukiwań.</div>';
+    return;
+  }
+  let html = list.map(term => `<button class="history-item" data-term="${term.replace(/"/g, '&quot;')}">${term}</button>`).join('');
+  html += '<button class="history-clear" id="historyClear">Wyczyść historię</button>';
+  historyDropdown.innerHTML = html;
+
+  historyDropdown.querySelectorAll('.history-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      searchInput.value = btn.dataset.term;
+      query = btn.dataset.term;
+      render();
+      closeHistoryDropdown();
+    });
+  });
+
+  const clearBtn = document.getElementById('historyClear');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      saveSearchHistory([]);
+      renderHistoryDropdown();
+    });
+  }
+}
+
+function openHistoryDropdown() {
+  renderHistoryDropdown();
+  historyDropdown.classList.add('open');
+}
+
+function closeHistoryDropdown() {
+  historyDropdown.classList.remove('open');
+}
+
+historyToggle.addEventListener('click', () => {
+  if (historyDropdown.classList.contains('open')) {
+    closeHistoryDropdown();
+  } else {
+    openHistoryDropdown();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-wrap')) closeHistoryDropdown();
+});
+
+searchInput.addEventListener('input', (e) => {
+  query = e.target.value;
+  render();
+});
+
+searchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && query.trim()) {
+    addToSearchHistory(query.trim());
+  }
+});
+
+searchInput.addEventListener('blur', () => {
+  if (query.trim()) addToSearchHistory(query.trim());
+});
+
+const toggleAdd = document.getElementById('toggleAdd');
+const addPanel = document.getElementById('addPanel');
+toggleAdd.addEventListener('click', () => {
+  if (editingId) { exitEdit(); return; }
+  addPanel.classList.toggle('open');
+});
+
+document.getElementById('cancelEdit').addEventListener('click', exitEdit);
+
+document.getElementById('submitAdd').addEventListener('click', () => {
+  const term = document.getElementById('newTerm').value.trim();
+  const alias = document.getElementById('newAlias').value.trim();
+  const cat = document.getElementById('newCat').value;
+  const level = parseInt(document.getElementById('newLevel').value, 10);
+  const def = document.getElementById('newDef').value.trim();
+  const errorEl = document.getElementById('addError');
+
+  if (!term || !def) {
+    errorEl.classList.add('show');
+    return;
+  }
+  errorEl.classList.remove('show');
+
+  if (editingId) {
+    const old = findEntry(editingId);
+    const oldEntry = old ? old.entry : {};
+    for (const c of ['prog', 'fin']) {
+      data[c] = data[c].filter(e => e.id !== editingId);
+    }
+    const editedEntry = { id: editingId, term, def, level };
+    if (alias) editedEntry.alias = alias;
+    if (oldEntry.starred) editedEntry.starred = true;
+    if (oldEntry.simple) editedEntry.simple = oldEntry.simple;
+    data[cat].push(editedEntry);
+  } else {
+    const newEntry = { id: uid(), term, def, level };
+    if (alias) newEntry.alias = alias;
+    data[cat].push(newEntry);
+  }
+  persist();
+
+  exitEdit();
+
+  if (cat !== activeCat) {
+    document.querySelectorAll('.tab').forEach(b => {
+      const isActive = b.dataset.cat === cat;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', String(isActive));
+    });
+    activeCat = cat;
+  }
+  render();
+});
+
+try {
+  const saved = localStorage.getItem('slowniczek-cat');
+  if (saved && data[saved]) {
+    activeCat = saved;
+    document.querySelectorAll('.tab').forEach(b => {
+      const isActive = b.dataset.cat === saved;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', String(isActive));
+    });
+    document.getElementById('newCat').value = saved;
+  }
+} catch (e) {}
+
+render();
+initFirebaseSync();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
